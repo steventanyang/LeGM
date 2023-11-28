@@ -1,11 +1,18 @@
 import './App.css';
 
 function App() {
+
   return (
     <div className="App">
-      <div>
-        Hello
-      </div>
+
+      <form className="form">
+        <label >
+          Name:
+          <input type="text" name="name" />
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+
     </div>
   );
 }
