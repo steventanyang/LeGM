@@ -6,6 +6,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+import feedparser
+
 import time
 
 service = Service(executable_path="/Users/stevenyang/projects/harden/selenium/chromedriver")
@@ -56,22 +58,12 @@ def statmuseSearch(website, search):
 
 def injuryReport(website):
 
-    driver.get(website) #this gets the website
+    url = website
+    f = feedparser.parse(url)
+    for entry in f.entries: 
+        print(entry)
 
-    WebDriverWait(driver, 5).until( #we're waiting until everything loads
-	    EC.presence_of_element_located((By.XPATH, "//item/description")) 
-    )
-
-    descriptions = driver.find_elements(By.XPATH, "//item/description")
-
-    for description in descriptions:
-        print(description.text)
-    
-    time.sleep(10)
-    driver.quit()
-
-    return descriptions
-
+    #https://www.youtube.com/watch?v=n7K7Inkk9Jc&ab_channel=JCharisTech
 
 # print(statmuseSearch("https://www.statmuse.com/nba", "lebron james points"))
 injuries = injuryReport("https://www.rotowire.com/rss/news.php?sport=NBA")
