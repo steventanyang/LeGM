@@ -6,25 +6,11 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-import feedparser
-
 import time
 
-service = Service(executable_path="/Users/stevenyang/projects/harden/selenium/chromedriver")
+
+service = Service(executable_path="./chromedriver")
 driver = webdriver.Chrome(service=service)
-
-# driver.get("https://www.statmuse.com/nba")
-
-# WebDriverWait(driver, 5).until(
-# 	EC.presence_of_element_located((By.NAME, "question[query]"))
-# )
-
-# input_element = driver.find_element(By.NAME, "question[query]")
-
-# input_element.send_keys("Lebron James stats this season" + Keys.ENTER)
-
-# time.sleep(10)
-# driver.quit()
 
 def statmuseSearch(website, search):
 
@@ -37,12 +23,6 @@ def statmuseSearch(website, search):
     input_element = driver.find_element(By.NAME, "question[query]") #finds the search bar
     input_element.send_keys(search + Keys.ENTER) #enters the search
 
-    #click on link
-    # WebDriverWait(driver, 10).until( #we're waiting until everything loads
-	#     EC.presence_of_element_located((By.LINK_TEXT, "LeBron James")) 
-    # )
-    # link = driver.find_element(By.LINK_TEXT, "LeBron James")
-    # link.click()
 
     WebDriverWait(driver, 5).until( #we're waiting until everything loads
 	    EC.presence_of_element_located((By.XPATH, "//p[contains(@class, 'my-[1em]') and contains(@class, 'underline') and contains(@class, 'text-team-secondary')]")) 
@@ -56,15 +36,36 @@ def statmuseSearch(website, search):
 
     return element
 
-def injuryReport(website):
+def pullEspnLeague(website, email):
 
-    url = website
-    f = feedparser.parse(url)
-    for entry in f.entries: 
-        print(entry)
+    driver.get(website)
+    WebDriverWait(driver, 5).until( #we're waiting until everything loads
+	    EC.presence_of_element_located((By.LINK_TEXT, "Log In")) 
+    )
+    link = driver.find_element(By.LINK_TEXT, "Log In")
+    link.click()
 
-    #https://www.youtube.com/watch?v=n7K7Inkk9Jc&ab_channel=JCharisTech
+    WebDriverWait(driver, 5).until( #we're waiting until everything loads
+	    EC.presence_of_element_located((By.LINK_TEXT, "SIGN UP")) 
+    )
+    link = driver.find_element(By.LINK_TEXT, "SIGN UP")
+    link.click()
 
-# print(statmuseSearch("https://www.statmuse.com/nba", "lebron james points"))
-injuries = injuryReport("https://www.rotowire.com/rss/news.php?sport=NBA")
+    WebDriverWait(driver, 5).until( #we're waiting until everything loads
+	    EC.presence_of_element_located((By.XPATH, "//button[@id='BtnSubmit' and @type='submit']")) 
+    )
+    submit_button = driver.find_element(By.XPATH, "//button[@id='BtnSubmit' and @type='submit']")
+    submit_button.click()
 
+    # input_element.send_keys(email + Keys.ENTER) #enters the search
+
+
+    time.sleep(10)
+    driver.quit()
+
+    return
+
+
+# statmuseSearch("https://www.statmuse.com/nba", "who scored the most points this week")
+
+pullEspnLeague('https://www.espn.com/fantasy/', 'stevenwatchesyou88@gmail.com')
