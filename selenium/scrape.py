@@ -37,7 +37,7 @@ def statmuseSearch(website, search):
 
     return element
 
-def pullEspnLeague(website, email):
+def pullEspnLeague(website, email, password):
 
     driver.get(website)
     WebDriverWait(driver, 5).until( #we're waiting until everything loads
@@ -52,14 +52,38 @@ def pullEspnLeague(website, email):
     link = driver.find_element(By.LINK_TEXT, "SIGN UP")
     link.click()
 
-    WebDriverWait(driver, 10).until( #we're waiting until everything loads
-	    EC.presence_of_element_located((By.XPATH, "//*[text()='Email']")) 
-    )
-    print('found')
-    element = driver.find_element(By.XPATH, "//*[text()='Email']")
-    element.click()
+    driver.implicitly_wait(5)
 
+    iframe = 'oneid-iframe'
+    driver.switch_to.frame(iframe)
+
+    #entering username
+
+    WebDriverWait(driver, 10).until( 
+	    EC.presence_of_element_located((By.CSS_SELECTOR, 'input[placeholder="Email"]')) 
+    )
+    driver.find_element(By.CSS_SELECTOR, 'input[placeholder="Email"]').click()
     ActionChains(driver).send_keys(email).perform()
+
+    WebDriverWait(driver, 10).until( 
+	    EC.presence_of_element_located((By.ID, 'BtnSubmit')) 
+    )
+    submit = driver.find_element(By.ID, 'BtnSubmit')
+    submit.click()
+
+
+    #entering password
+    WebDriverWait(driver, 10).until( 
+	    EC.presence_of_element_located((By.CSS_SELECTOR, 'input[placeholder="Password"]')) 
+    )
+    driver.find_element(By.CSS_SELECTOR, 'input[placeholder="Password"]').click()
+    ActionChains(driver).send_keys(password).perform()
+
+    WebDriverWait(driver, 10).until( 
+	    EC.presence_of_element_located((By.ID, 'BtnSubmit')) 
+    )
+    submit = driver.find_element(By.ID, 'BtnSubmit')
+    submit.click()
 
     time.sleep(10)
     driver.quit()
@@ -69,4 +93,4 @@ def pullEspnLeague(website, email):
 
 # statmuseSearch("https://www.statmuse.com/nba", "who scored the most points this week")
 
-pullEspnLeague('https://www.espn.com/fantasy/', 'stevenwatchesyou88@gmail.com')
+pullEspnLeague('https://www.espn.com/fantasy/', 'stevenwatchesyou88@gmail.com', 'blackhawks158819')
