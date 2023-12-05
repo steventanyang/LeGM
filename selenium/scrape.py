@@ -37,7 +37,7 @@ def statmuseSearch(website, search):
 
     return element
 
-def pullEspnLeague(website, email, password):
+def pullEspnLeague(website, email, password, teamName):
 
     driver.get(website)
     WebDriverWait(driver, 5).until( #we're waiting until everything loads
@@ -82,15 +82,43 @@ def pullEspnLeague(website, email, password):
     WebDriverWait(driver, 10).until( 
 	    EC.presence_of_element_located((By.ID, 'BtnSubmit')) 
     )
-    submit = driver.find_element(By.ID, 'BtnSubmit')
-    submit.click()
+    submit = driver.find_element(By.ID, 'BtnSubmit').click()
+
+
+    #scraping players on team
+
+    WebDriverWait(driver, 5).until( #we're waiting until everything loads
+	    EC.presence_of_element_located((By.LINK_TEXT, 'Fantasy')) 
+    )
+    link = driver.find_element(By.LINK_TEXT, 'Fantasy').click()
+
+    WebDriverWait(driver, 5).until( #we're waiting until everything loads
+	    EC.presence_of_element_located((By.LINK_TEXT, teamName)) 
+    )
+    link = driver.find_element(By.LINK_TEXT, teamName).click()
+
+    # WebDriverWait(driver, 5).until( #we're waiting until everything loads
+	#     EC.presence_of_element_located((By.CLASS_NAME, 'AnchorLink.link.clr-link.pointer')) 
+    # )
+    # players = driver.find_element(By.CLASS_NAME, 'AnchorLink.link.clr-link.pointer').text
+    
+
+    WebDriverWait(driver, 5).until( #we're waiting until everything loads
+	    EC.presence_of_element_located((By.CLASS_NAME, "player-column__athlete"))
+    )
+    players = driver.find_elements(By.CLASS_NAME, "player-column__athlete")
+
+    for player in players: 
+        print(player.get_attribute('title'))
+
+
+
 
     time.sleep(10)
     driver.quit()
 
     return
 
+# statmuseSearch("https://www.statmuse.com/nba", "most assists this season")
 
-# statmuseSearch("https://www.statmuse.com/nba", "who scored the most points this week")
-
-pullEspnLeague('https://www.espn.com/fantasy/', 'stevenwatchesyou88@gmail.com', 'blackhawks158819')
+pullEspnLeague('https://www.espn.com/fantasy/', 'stevenwatchesyou88@gmail.com', 'blackhawks158819', 'Yang')
