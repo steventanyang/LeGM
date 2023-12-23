@@ -39,6 +39,9 @@ def statmuseSearch(website, search):
 
 def pullEspnLeague(website, email, password, teamName):
 
+
+    #test
+    
     driver.get(website)
     WebDriverWait(driver, 5).until( #we're waiting until everything loads
 	    EC.presence_of_element_located((By.LINK_TEXT, "Log In")) 
